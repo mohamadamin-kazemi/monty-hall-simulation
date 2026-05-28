@@ -51,21 +51,15 @@ def simulate_games(num_games: int, switch_doors: bool) -> Tuple[float, float]:
     """
     # In Python, True evaluates to 1 and False to 0. 
     # We can sum a generator expression to get the total number of wins quickly.
-    wins = sum(monty_hall_game(switch_doors) for _ in range(num_games))
+    with_switch_wins = sum(monty_hall_game(switch_doors) for _ in range(num_games))
+    without_switch_wins = num_games - with_switch_wins
     
-    win_rate = wins / num_games
-    loss_rate = 1.0 - win_rate
-    
-    return win_rate, loss_rate
+    return with_switch_wins, without_switch_wins
 
 
 if __name__ == "__main__":
     games_to_play = 1_000_000
 
-    # Simulate without switching
-    stay_wins, stay_losses = simulate_games(games_to_play, switch_doors=False)
-    print(f"Not switching doors: Wins: {stay_wins:.2%}, Losses: {stay_losses:.2%}")
-
-    # Simulate with switching
-    switch_wins, switch_losses = simulate_games(games_to_play, switch_doors=True)
-    print(f"Switching doors: Wins: {switch_wins:.2%}, Losses: {switch_losses:.2%}")
+    win_percentage_with_switch, win_percentage_without_switch = simulate_games(games_to_play, switch_doors=True)
+    print(f"Switching wins: {win_percentage_with_switch} out of {games_to_play} ({win_percentage_with_switch / games_to_play:.2%})")
+    print(f"Not switching wins: {win_percentage_without_switch} out of {games_to_play} ({win_percentage_without_switch / games_to_play:.2%})")
